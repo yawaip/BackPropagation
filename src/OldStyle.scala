@@ -17,14 +17,15 @@ object OldStyle {
 	
 		//入力と隠れ層の間の重みをランダムに初期化
 		//[入力ユニットN番目][隠れそうユニットM番目]
-		var w1 = Array.ofDim[Double]( input_dimension ,(input_dimension max hidden_number)  ).map{ v => v.map{v2 => rand.nextDouble }};
+		var w1 = Array.ofDim[Double]( input_dimension ,(input_dimension max hidden_number)  ).map{ v => v.map{v2 => rand.nextDouble * 2 - 1 }};
 		//隠れ層と出力層の間の重みをランダムに初期化
-		var w2 = Array.ofDim[Double]( hidden_number , (hidden_number max output_signal_dimension)  ).map{ v => v.map{v2 => rand.nextDouble  }};
+		var w2 = Array.ofDim[Double]( hidden_number , (hidden_number max output_signal_dimension)  ).map{ v => v.map{v2 => rand.nextDouble * 2 - 1 }};
 		
 		val N = 100;
 		val input_signals = (-1.0 to 1.0 by 2.0 / N);
 		val inst_signals = input_signals.map{v => 0.5 *  (Math.sin( Math.PI * v) + 1)}; // サインカーブ
 		//val inst_signals = input_signals.map{v => v * v}; //二次関数
+		//val inst_signals = input_signals.map{v => v/2 + 0.5}; //一次関数
 		
 		println(input_signals);
 		println(inst_signals);
