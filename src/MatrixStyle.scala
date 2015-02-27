@@ -22,7 +22,7 @@ object MatrixStyle {
       	}
       	a;
       }:Array[Array[Double]])(temp);
-    val instraction = Array.ofDim[Double](temp.length, signal_num-1);
+    val instraction = Array.ofDim[Double](temp.length, output_num);
 
     val rand = new Random;
  		var w1 = DenseMatrix.zeros[Double]( hidden_num, signal_num).map{v => rand.nextDouble()*2 - 1};
@@ -32,12 +32,15 @@ object MatrixStyle {
     	for( in <- input ){
         //入力ベクトル
     		val x1 = ((arr:Array[Double]) => {
+          DenseVector(arr :+ 1.0);//バイアスベクトルを追加して行列を作成
+          /*
               var a = DenseVector.zeros[Double]( signal_num );
               for(b <- 0 until arr.length) {
                 a(b) = arr(b);
               }
               a(a.length-1) = 1.0; //バイアスベクトルを追加
               a;
+           */
             }:DenseVector[Double])(in);
 
     		val x2 = (w1 * x1).map { v => sigmoid(v) };
