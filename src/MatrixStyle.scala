@@ -11,7 +11,7 @@ object MatrixStyle {
   
   def main(args: Array[String]): Unit = {
     val signal_num = 2; //バイアス含めた入力次元数
-    val hidden_num = 3; //隠れ層の次元数
+    val hidden_num = 4; //隠れ層の次元数
     val output_num = 1;
     val eta = 0.1;
     
@@ -54,40 +54,13 @@ object MatrixStyle {
         val inst = DenseVector(instraction(input_num)); //教師信号
         val error = (x3 - inst).map{ v => 0.5 * v * v }.sum; 
         //出力層の誤差を計算
-        val error_out = (x3-inst) * x3.t * (1.0-x3);
-        
+        val error_out = (x3-inst) * x3.t * (1.0-x3);        
         //隠れ層の誤差を計算
         val error_hidden = diag(diag(x2*(w2.t*error_out).t) * (1.0 - x2).t);
         
-        //出力層 の誤差を計算
-        var epsi_out = new Array[Double](x3.length);
-        for(i <- 0 until epsi_out.length){
-          epsi_out(i) = (x3(i) - inst(i)) * x3(i) * ( 1 - x3(i) );
-        }
-        
-        //隠れ層 の誤差を計算
-        var epsi_hidden = new Array[Double](x2.length);
-        for ( i <- 0 until x2.length){
-          var temp = 0.0;
-          for ( j <- 0 until x3.length){
-            temp += w2(j,i) * epsi_out(j);
-          }
-          epsi_hidden(i) = temp * x2(i) *( 1 - x2(i));
-        }
-        
-           //重みの修正 入力→隠れ層
-        for(i <- 0 until x1.length){
-          for( j <- 0 until x2.length ){
-            w1(j,i) -= eta * ( x1(i) * epsi_hidden(j) );
-          }
-        }
-
-        //重みの修正 隠れ層→出力層
-        for (i <- 0 until x2.length){
-          for ( j <- 0 until x3.length){
-            w2(j,i) -= eta * ( x2(i) * epsi_out(j) ); 
-          }
-        }
+        //重みを更新
+        w1 -= (x1 * error_hidden.t).t :* eta;
+        w2 -= (x2 * error_out.t).t :* eta;
     	} 
     }
     
