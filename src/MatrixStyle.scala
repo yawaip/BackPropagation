@@ -15,7 +15,7 @@ object MatrixStyle {
     val output_num = 1;
     val eta = 0.1;
     
-    val N = 100;
+    val N = 5;
     val temp_input = ( -1.0 to 1.0 by 2.0 / N ).toArray;
     val temp_inst = temp_input.map { v => 0.5 * ( Math.sin ( Math.PI * v ) + 1)};
     val input = ((arr:Array[Double]) => {
@@ -63,20 +63,19 @@ object MatrixStyle {
         */
         //隠れ層の誤差を計算
         //val error_hidden = ((w2.t * error_out) * x2.t) * ( 1.0 - x2);
-        println("***");
+        //println("***");
         val error_hidden = diag(diag(x2*(w2.t*error_out).t) * (1.0 - x2).t);
-        println(error_hidden);
-        println("+++")
+        //println(error_hidden);
+        //println("+++")
         //val error_hidden = ( w2.t * error_out  ) * x2.t //* ( 1.0 - x2 );
         //val error_hidden = ((w2.t * error_out ) * x2.t) * ( 1.0 - x2);// これか？
         //val error_hidden = (w2*error_out)*x2.t*(1.0-x2);
        // val error_hidden = x2.t * (w2 * error_out); 
-        //println("error_hidden "+error_hidden);
         
         //出力層 の誤差を計算
         var epsi_out = new Array[Double](x3.length);
         for(i <- 0 until epsi_out.length){
-          epsi_out(i) = (x3(i) - inst(i)) * x3(i) * ( 1 - x3(i) );
+          epsi_out(i) = (x3(i) - inst(i)) * x3(i) * ( 1.0 - x3(i) );
         }
         
         //隠れ層 の誤差を計算
@@ -89,6 +88,7 @@ object MatrixStyle {
           epsi_hidden(i) = temp * x2(i) *( 1 - x2(i));
           //println(epsi_hidden(i));
         }
+        println("error_hidden "+error_hidden);
         println(epsi_hidden.deep);
         
         //重みの修正
@@ -104,7 +104,6 @@ object MatrixStyle {
         w1 -=  ( x1 * error_hidden.t).t :* eta;
         w2 -= ( x2 * error_out.t).t :* eta;
         */
-        
         //重みの修正 入力→隠れ層
         for(i <- 0 until x1.length){
           for( j <- 0 until x2.length ){
@@ -118,7 +117,7 @@ object MatrixStyle {
             w2(j,i) -= eta * ( x2(i) * epsi_out(j) ); 
           }
         }
-    	}
+    	} 
       //println (err);
     }
     
