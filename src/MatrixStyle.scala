@@ -55,10 +55,7 @@ object MatrixStyle {
         val error = (x3 - inst).map{ v => 0.5 * v * v }.sum; 
         //print(inst);print(" ");print(x3);print(" ");println(error);
         //出力層の誤差を計算
-        //val error_out = (x3 - inst).t * x3;
-        //val error_out = (x3 * (1.0 - x3).t) * (x3 - inst);
         val error_out = (x3-inst) * x3.t * (1.0-x3);
-        //val error_out = ((x3 - inst).t * x3) * ( 1.0 - x3 ); //おかしいやろ係数がひとつはおかしい
         /*
         println("error_out "+error_out);
         println("x2 " + x2);
@@ -76,6 +73,7 @@ object MatrixStyle {
         for(i <- 0 until epsi_out.length){
           epsi_out(i) = (x3(i) - inst(i)) * x3(i) * ( 1 - x3(i) );
         }
+        
         println(error_out);
         println(epsi_out.deep);
         
