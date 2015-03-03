@@ -12,7 +12,7 @@ object MatrixStyle {
   def main(args: Array[String]): Unit = {
     val signal_num = 2; //バイアス含めた入力次元数
     val hidden_num = 4; //隠れ層の次元数
-    val output_num = 1;
+    val output_num = 2;
     val eta = 0.1;
     
     val N = 100;
@@ -57,6 +57,16 @@ object MatrixStyle {
         val error_out = (x3-inst) * x3.t * (1.0-x3);        
         //隠れ層の誤差を計算
         val error_hidden = diag(diag(x2*(w2.t*error_out).t) * (1.0 - x2).t);
+        /*
+        //デバッグ
+        println("w2 " + w2);
+        println("error_out "+error_out);
+        println("w2.t * error_out " + w2.t*error_out);
+        println("x2 "+x2);
+        println("x2*(w2.t*error_out).t " + x2*(w2.t*error_out).t);
+        println("diag(x2*(w2.t*error_out).t) " + diag(x2*(w2.t*error_out).t));
+        System.exit(0);
+        */
         
         //重みを更新
         w1 -= (x1 * error_hidden.t).t :* eta;
